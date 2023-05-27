@@ -15,6 +15,11 @@ EXPOSE 9000
 
 FROM base as development
 
+ARG USER_ID=1000
+ARG GROUP_ID=1000
+ARG USER=developer
+ARG GROUP=developer
+
 ENV TZ ${TZ}
 
 RUN pecl channel-update pecl.php.net
@@ -25,3 +30,6 @@ RUN apk add --update --upgrade tzdata autoconf g++ make \
     && docker-php-ext-enable xdebug
 
 COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
+
+RUN addgroup -g ${GROUP_ID} ${GROUP} \
+    && adduser -G ${GROUP} -u ${USER_ID} ${USER} -D

@@ -2,19 +2,25 @@ version: '3.7'
 
 services:
   php:
+    container_name: php
     image: graphicresources/itpg-api-coding-task:development
     working_dir: /var/www
     command: php -S 0.0.0.0:8080 -t public
     environment:
       docker: "true"
+      PHP_IDE_CONFIG: serverName=freepik
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     ports:
       - "8080:8080"
     volumes:
       - ./app:/var/www
+      - ./config/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
     networks:
       - bridge
 
   db:
+    container_name: db
     image: percona
     restart: always
     ports:
